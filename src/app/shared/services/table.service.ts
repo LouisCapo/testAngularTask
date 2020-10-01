@@ -9,6 +9,8 @@ export class TableService {
 
   tableData$ = new BehaviorSubject<Array<NetWeightData>>(undefined);
 
+  editedDataTable$ = new BehaviorSubject<Array<NetWeightData>>(undefined);
+
   changeDetected$ = new BehaviorSubject(false);
 
   constructor() { }

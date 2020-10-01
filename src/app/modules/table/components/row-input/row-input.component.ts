@@ -55,6 +55,7 @@ export class RowInputComponent implements OnInit {
         this.toolTipMessage = '';
         this.isFormInvalid = false;
         this.onValueChanges.emit(false);
+        this.tableService.editedDataTable$.next(this.valuesCopy);
       }
     });
   }

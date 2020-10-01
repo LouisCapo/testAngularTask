@@ -31,6 +31,7 @@ export class TableComponent implements OnInit {
   }
 
   onSave(){
+    this.tableService.tableData$.next(JSON.parse(JSON.stringify(this.tableService.editedDataTable$.getValue())));
     this.tableService.changeDetected$.next(true);
     this.isEdit = false;
   }
