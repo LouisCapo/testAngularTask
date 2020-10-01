@@ -40,7 +40,6 @@ export class TableComponent implements OnInit {
   }
 
   onInputChanged(event){
-    console.log(event);
     this.isSaveButtonActive = event;
   }
 

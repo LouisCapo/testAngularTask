@@ -18,49 +18,44 @@ export class RowInputComponent implements OnInit {
 
   isFormInvalid = false;
   toolTipMessage = '';
+  valuesCopy: Array<NetWeightData>;
 
   constructor(private tableService: TableService) {}
 
   ngOnInit() {
     this.valueControl = new FormControl(this.value);
-    let valueArr = this.tableService.tableData$.getValue();
-    this.tableService.changeDetected$.subscribe((res) => {
-      console.log(res);
-      if (res) {
-        valueArr[0].netWeightValues[this.index] = parseInt(
-          this.valueControl.value
-        );
-
-        this.tableService.tableData$.next(valueArr);
-      }
-    });
-
     this.valueControl.valueChanges.subscribe((formValue) => {
+      if (formValue === 0 || !Number.isInteger(formValue)) {
+        this.toolTipMessage =
+          'Значение должно быть больше 0 и должно быть целым числом';
+        this.isFormInvalid = true;
+        this.onValueChanges.emit(true);
+        return;
+      }
+      this.valuesCopy = JSON.parse(
+        JSON.stringify(this.tableService.tableData$.getValue())
+      );
+      this.valuesCopy[0].netWeightValues[this.index] = formValue;
       if (
-        (this.index !== 0 &&
-          formValue < valueArr[0].netWeightValues[this.index + 1] &&
-          formValue > valueArr[0].netWeightValues[this.index + 1]) ||
         (this.index === 0 &&
-          formValue < valueArr[0].netWeightValues[this.index + 1])
+          formValue > this.valuesCopy[0].netWeightValues[this.index + 1]) ||
+        (this.index !== 0 &&
+          this.index !== this.valuesCopy[0].netWeightValues.length &&
+          (formValue < this.valuesCopy[0].netWeightValues[this.index - 1] ||
+            formValue > this.valuesCopy[0].netWeightValues[this.index + 1])) ||
+        (this.index === this.valuesCopy[0].netWeightValues.length &&
+          formValue < this.valuesCopy[0].netWeightValues[this.index - 1])
       ) {
+        this.toolTipMessage = 'Вес каждого последующего размера должен быть больше предыдущего!';
+        this.isFormInvalid = true;
+        this.onValueChanges.emit(true);
+        return;
+      } else {
+        this.toolTipMessage = '';
         this.toolTipMessage = '';
         this.isFormInvalid = false;
         this.onValueChanges.emit(false);
-      } else {
-        this.toolTipMessage =
-          'Вес каждого последующего размера, должен быть больше предидущего';
-        this.isFormInvalid = true;
-        this.onValueChanges.emit(true);
-        return;
       }
-
-      console.log(formValue);
-      if (formValue === 0) {
-        this.isFormInvalid = true;
-        this.onValueChanges.emit(true);
-        return;
-      }
-      this.onValueChanges.emit(false);
     });
   }
 }
