@@ -15,6 +15,7 @@ export class TableComponent implements OnInit {
   isEdit = false;
   isSaveButtonActive = true;
 
+
   columns: Array<string>;
   rows: Array<number>;
   tableData: Array<NetWeightData>;

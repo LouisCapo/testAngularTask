@@ -1,4 +1,4 @@
 <span class="p-input-icon-right">
-  <i class="pi pi-times" ></i>
+  <i class="pi pi-times" (click)="cleanInput()" ></i>
   <input [pTooltip]="toolTipMessage" type="number" [ngClass]="{'p-invalid': isFormInvalid}" [formControl]="valueControl" pInputText/>
 </span>

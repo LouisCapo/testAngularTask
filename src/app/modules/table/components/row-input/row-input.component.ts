@@ -52,11 +52,15 @@ export class RowInputComponent implements OnInit {
         return;
       } else {
         this.toolTipMessage = '';
-        this.toolTipMessage = '';
         this.isFormInvalid = false;
         this.onValueChanges.emit(false);
         this.tableService.editedDataTable$.next(this.valuesCopy);
       }
     });
   }
+
+  cleanInput(){
+    this.valueControl.setValue('');
+  }
+
 }
